@@ -1,7 +1,17 @@
 import React from 'react';
 import { FaUser, FaRobot } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
+import { useTypingEffect } from '../hooks/useTypingEffect';
 
-const ChatMessage = ({ message, isUser, timestamp }) => {
+const ChatMessage = ({ message, isUser, timestamp, enableTyping = false }) => {
+  const { displayedText, isTyping } = useTypingEffect(
+    message,
+    5,
+    !isUser && enableTyping
+  );
+
+  // Show the displayed text (either typed or full text)
+  const textToShow = (!isUser && enableTyping) ? displayedText : message;
   return (
     <div
       className={`flex gap-3 p-4 message-animation ${
@@ -32,9 +42,27 @@ const ChatMessage = ({ message, isUser, timestamp }) => {
               : 'bg-white text-gray-800 rounded-tl-none border border-gray-200'
           }`}
         >
-          <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
-            {message}
-          </p>
+          {isUser ? (
+            <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+              {textToShow}
+            </p>
+          ) : (
+            <div className="text-sm leading-relaxed markdown-content">
+              <ReactMarkdown
+                components={{
+                  ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-2" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 my-2" {...props} />,
+                  li: ({node, ...props}) => <li className="ml-2" {...props} />,
+                  p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                  strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
+                  em: ({node, ...props}) => <em className="italic" {...props} />,
+                }}
+              >
+                {textToShow}
+              </ReactMarkdown>
+              {isTyping && <span className="typing-cursor">|</span>}
+            </div>
+          )}
         </div>
 
         {/* Timestamp */}

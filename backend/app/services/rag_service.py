@@ -187,11 +187,16 @@ Context:
 Question: {question}
 
 Instructions:
-- Provide a direct, clear and concise answer based on the context provided
-- Do NOT mention sources, source numbers, or where the information came from
-- Do NOT use phrases like "according to", "mentioned in", "as stated in", or similar references
-- Answer naturally as if you are stating a fact
-- If the context doesn't contain enough information to fully answer the question, say so
+- First, determine if the question is related to QSS Technosoft, the company's services, products, or business
+- If the question is NOT related to QSS Technosoft (e.g., general knowledge questions, unrelated topics), respond with: "This question is not related to QSS Technosoft. Please ask questions about our company, services, products, or business operations."
+- If the question IS related to QSS Technosoft but the context doesn't have the answer, respond with: "I don't have specific information about this in the available documents. Please contact QSS Technosoft directly for more details."
+- For valid company-related questions with available information:
+  - Provide a direct, clear and concise answer based on the context provided
+  - Format your answer using bullet points (using - or *) when listing multiple items or facts
+  - For single fact answers, you can respond in a sentence without bullets
+  - Do NOT mention sources, source numbers, or where the information came from
+  - Do NOT use phrases like "according to", "mentioned in", "as stated in", "this document", or similar references
+  - Answer naturally as if you are stating a fact
 - Maintain a professional and helpful tone
 
 Answer:"""

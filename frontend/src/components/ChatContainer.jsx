@@ -10,6 +10,7 @@ const ChatContainer = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [latestMessageId, setLatestMessageId] = useState(null);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
@@ -55,14 +56,16 @@ const ChatContainer = () => {
       const response = await chatAPI.sendMessage(messageText);
 
       // Add assistant response
+      const assistantMessageId = Date.now() + 1;
       const assistantMessage = {
-        id: Date.now() + 1,
+        id: assistantMessageId,
         text: response.answer || response.message || 'I apologize, but I could not generate a response.',
         isUser: false,
         timestamp: new Date().toISOString(),
         sources: response.sources || [],
       };
 
+      setLatestMessageId(assistantMessageId);
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
       console.error('Error sending message:', err);
@@ -124,6 +127,7 @@ const ChatContainer = () => {
               message={msg.text}
               isUser={msg.isUser}
               timestamp={msg.timestamp}
+              enableTyping={msg.id === latestMessageId}
             />
           ))}
 
